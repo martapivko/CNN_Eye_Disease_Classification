@@ -1,0 +1,12 @@
+name: keras-env
+channels:
+  - defaults
+  - tensorflow
+dependencies:
+  - tensorflow=2.10.0
+  - keras=2.10.0
+  - matplotlib
+  - category_encoders
+  - opencv-python
+  - glob2
+  - python=3.8.13
