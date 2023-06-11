@@ -15,49 +15,40 @@ class KFolder:
 
         self.folds = self._compute_folds()
 
-    def _get_indicies(self, indice):
+    def _get_indices(self, indice):
 
         valid_indice = indice
 
         if indice == 0:
-            train_indicies = list(np.arange(indice+1, self.k))
+            train_indices = list(np.arange(indice+1, self.k))
         else:
-            train_indicies = list()
+            train_indices = list()
 
-            train_indicies.extend(list(np.arange(0, indice)))
-            train_indicies.extend(list(np.arange(indice+1, self.k)))
+            train_indices.extend(list(np.arange(0, indice)))
+            train_indices.extend(list(np.arange(indice+1, self.k)))
 
-        return train_indicies, valid_indice
+        return train_indices, valid_indice
 
 
     def _compute_folds(self):
+        num_samples = self.x.shape[0]
+        fold_size = num_samples // self.k
 
-        x_folds = np.split(self.x, self.k)
-        y_folds = np.split(self.y, self.k)
+        folds = []
 
-        folds = list()
-        
         print("Computing folds")
-        for indice in tqdm(range(self.k)):
+        for i in tqdm(range(self.k)):
+            start = i * fold_size
+            end = start + fold_size
 
-            x_train = list()
-            y_train = list()
-            x_valid = list()
-            y_valid = list()
+            x_valid = self.x[start:end]
+            y_valid = self.y[start:end]
 
-            train_indicies, valid_indice = self._get_indicies(indice)
+            train_indices, valid_indice = self._get_indices(i)
 
-            x_valid = x_folds[valid_indice]
-            y_valid = y_folds[valid_indice]
+            x_train = np.concatenate([self.x[train_idx * fold_size : (train_idx + 1) * fold_size] for train_idx in train_indices])
+            y_train = np.concatenate([self.y[train_idx * fold_size : (train_idx + 1) * fold_size] for train_idx in train_indices])
 
-            for train_indice in train_indicies:
-                x_train.extend(x_folds[train_indice])
-                y_train.extend(y_folds[train_indice])
+            folds.append((x_train.astype(np.float32), y_train.astype(np.float32), x_valid.astype(np.float32), y_valid.astype(np.float32)))
 
-            folds.append((np.array(x_train).astype(np.float32), np.array(y_train).astype(np.float32), np.array(x_valid).astype(np.float32), np.array(y_valid).astype(np.float32)))
-        return folds
-            
-
-        
-
-
+        return folds            

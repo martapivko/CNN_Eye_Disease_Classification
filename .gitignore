@@ -129,5 +129,6 @@ dmypy.json
 .pyre/
 # database
 dataset/
+splitted_dataset/
 
 .vscode
