@@ -1,0 +1,22 @@
+version: '3.0'
+services:
+  tensorflow:
+    container_name: msipb-gpu
+    image: tensorflow/tensorflow:latest-gpu-jupyter
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            device_ids: ['0']
+            capabilities: [gpu]
+    volumes:
+      - /home/peter/projects/MSiPB_Project:/app/projects/msipb-gpu
+    ports:
+      - '8888:8888'
+    networks:
+      - jupyter
+networks:
+  jupyter:
+    driver: bridge
