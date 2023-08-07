@@ -7,7 +7,7 @@ def ToAugmantate(train_augmentate: bool = True):
             rotation_range=0,
             zoom_range=0.0,
             horizontal_flip= True ,
-            vertical_flip = False,
+            vertical_flip = True,
             rescale=None
         )
         return train_generator
@@ -16,7 +16,7 @@ def ToAugmantate(train_augmentate: bool = True):
         rotation_range=0,
         zoom_range=0.0,
         horizontal_flip= True ,
-        vertical_flip = False,
+        vertical_flip = True,
         rescale=None
     )
     return test_generator
